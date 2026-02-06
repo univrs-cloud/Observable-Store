@@ -92,17 +92,16 @@ jobs:
           node-version: 22.x
           registry-url: https://registry.npmjs.org
 
+      - name: Ensure latest npm (OIDC publish support)
+        run: npm install -g npm@latest
+
       - name: Build modules
         run: npm run build
 
       - name: Publish observable-store
         working-directory: modules/observable-store
         run: npm publish --provenance --access public ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish observable-store-extensions
         working-directory: modules/observable-store-extensions
         run: npm publish --provenance --access public ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
